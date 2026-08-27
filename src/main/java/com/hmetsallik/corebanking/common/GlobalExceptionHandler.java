@@ -1,9 +1,11 @@
 package com.hmetsallik.corebanking.common;
 
-import com.hmetsallik.corebanking.account.AccountNotFoundException;
+import com.hmetsallik.corebanking.account.exception.AccountNotFoundException;
+import com.hmetsallik.corebanking.account.exception.DuplicateCurrencyException;
 import com.hmetsallik.corebanking.common.dto.ErrorResponse;
 import com.hmetsallik.corebanking.transaction.exception.CurrencyNotSupportedException;
 import com.hmetsallik.corebanking.transaction.exception.InsufficientFundsException;
+import com.hmetsallik.corebanking.transaction.exception.InvalidAmountException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -24,8 +27,18 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler(DuplicateCurrencyException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateCurrency(DuplicateCurrencyException ex) {
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(CurrencyNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleCurrencyNotSupported(CurrencyNotSupportedException ex) {
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidAmountException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidAmount(InvalidAmountException ex) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
@@ -36,10 +49,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult().getFieldErrors().stream()
-                .map(fe -> fe.getField() + " " + fe.getDefaultMessage())
-                .collect(Collectors.joining(", "));
-        return build(HttpStatus.BAD_REQUEST, message);
+        List<ErrorResponse.FieldError> fieldErrors = ex.getBindingResult().getFieldErrors().stream()
+                .map(fe -> new ErrorResponse.FieldError(fe.getField(), fe.getDefaultMessage()))
+                .collect(Collectors.toList());
+
+        ErrorResponse body = new ErrorResponse(
+                Instant.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "Validation failed", fieldErrors);
+        return ResponseEntity.badRequest().body(body);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -64,6 +81,6 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message) {
         return ResponseEntity.status(status)
-                .body(new ErrorResponse(Instant.now(), status.value(), status.getReasonPhrase(), message));
+                .body(new ErrorResponse(Instant.now(), status.value(), status.getReasonPhrase(), message, null));
     }
 }

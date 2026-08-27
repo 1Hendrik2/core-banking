@@ -2,6 +2,7 @@ package com.hmetsallik.corebanking.transaction.dto;
 
 import com.hmetsallik.corebanking.common.Currency;
 import com.hmetsallik.corebanking.common.Direction;
+import com.hmetsallik.corebanking.common.dto.Money;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,8 +14,7 @@ import java.util.UUID;
 public class TransactionResponse {
     private UUID accountId;
     private UUID transactionId;
-    private BigDecimal amount;
-    private Currency currency;
+    private Money money;
     private Direction direction;
     private String description;
     private BigDecimal balanceAfter;

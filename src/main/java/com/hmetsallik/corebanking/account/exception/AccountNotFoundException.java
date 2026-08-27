@@ -1,4 +1,4 @@
-package com.hmetsallik.corebanking.account;
+package com.hmetsallik.corebanking.account.exception;
 
 import java.util.UUID;
 
