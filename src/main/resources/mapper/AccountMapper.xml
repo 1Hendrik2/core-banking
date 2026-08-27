@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hmetsallik.corebanking.account.AccountMapper">
+
+    <insert id="insertAccount" parameterType="com.hmetsallik.corebanking.account.domain.Account">
+        INSERT INTO accounts (id, customer_id, country, created_at)
+        VALUES (#{id}, #{customerId}, #{country}, #{createdAt})
+    </insert>
+
+    <insert id="insertBalance" parameterType="com.hmetsallik.corebanking.account.domain.Balance">
+        INSERT INTO balances (id, account_id, currency, amount, updated_at)
+        VALUES (#{id}, #{accountId}, #{currency}, #{amount}, #{updatedAt})
+    </insert>
+
+    <select id="findAccountById" resultType="com.hmetsallik.corebanking.account.domain.Account">
+        SELECT id, customer_id, country, created_at
+        FROM accounts
+        WHERE id = #{id}
+    </select>
+
+    <select id="findBalancesByAccountId" resultType="com.hmetsallik.corebanking.account.domain.Balance">
+        SELECT id, account_id, currency, amount, updated_at
+        FROM balances
+        WHERE account_id = #{accountId}
+    </select>
+
+    <select id="findBalanceForUpdate" resultType="com.hmetsallik.corebanking.account.domain.Balance">
+        SELECT id, account_id, currency, amount, updated_at
+        FROM balances
+        WHERE account_id = #{accountId} AND currency = #{currency}
+        FOR UPDATE
+    </select>
+
+    <update id="updateBalance" parameterType="com.hmetsallik.corebanking.account.domain.Balance">
+        UPDATE balances
+        SET amount = #{amount}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
