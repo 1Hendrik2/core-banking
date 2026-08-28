@@ -1,6 +1,5 @@
 package com.hmetsallik.corebanking.transaction.dto;
 
-import com.hmetsallik.corebanking.common.Currency;
 import com.hmetsallik.corebanking.common.Direction;
 import com.hmetsallik.corebanking.common.dto.Money;
 import lombok.AllArgsConstructor;

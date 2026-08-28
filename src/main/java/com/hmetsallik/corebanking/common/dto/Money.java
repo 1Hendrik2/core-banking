@@ -2,7 +2,6 @@ package com.hmetsallik.corebanking.common.dto;
 
 import com.hmetsallik.corebanking.common.Currency;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

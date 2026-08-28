@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class CreateAccountRequest {
 
-    @NotBlank(message = "country is required")
+    @NotBlank(message = "customer id is required")
     private String customerId;
 
     @NotBlank(message = "country is required")

@@ -19,12 +19,12 @@ public class RabbitMQEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onAccountCreated(AccountCreatedEvent event) {
-        publish(RabbitMQConfig.ACCOUNT_CREATED_ROUTING_KEY, event.getAccount());
+        publish(RabbitMQConfig.ACCOUNT_CREATED_ROUTING_KEY, event.account());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onTransactionCreated(TransactionCreatedEvent event) {
-        publish(RabbitMQConfig.TRANSACTION_CREATED_ROUTING_KEY, event.getTransaction());
+        publish(RabbitMQConfig.TRANSACTION_CREATED_ROUTING_KEY, event.transaction());
     }
 
     private void publish(String routingKey, Object payload) {
