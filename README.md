@@ -291,7 +291,7 @@ A few concrete examples of how it was actually used, for transparency:
 - **AI was used to explain unfamiliar concepts, not just produce code.** Spring's exception
   handling pipeline, how `@TransactionalEventListener` and RabbitMQ actually work end-to-end, and
   the mechanics of the concurrency test were each explained in depth on request, since parts of
-  this stack (Spring Boot/MyBatis specifically) were newer territory going in.
+  this stack were newer territory going in.
 - **Current library documentation was checked directly rather than relying on possibly-outdated
   training knowledge**, particularly for Spring Boot 4's several breaking module reorganizations
   (Testcontainers artifact renames, `TestRestTemplate`'s move to a separate module and package,
@@ -303,6 +303,3 @@ A few concrete examples of how it was actually used, for transparency:
 - **The admin console was added the same way:** Vite + TypeScript scaffolding, shadcn/ui, RTK
   Query endpoint modules matching the Java DTOs, Docker/Nginx packaging so `docker compose up`
   starts the UI next to the API, and fixes for SPA/API path collisions on refresh.
-
-The result is code I understand and can defend line-by-line, built collaboratively rather than
-handed over wholesale.
