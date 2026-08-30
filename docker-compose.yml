@@ -32,7 +32,7 @@ services:
       retries: 10
 
   app:
-    build: .
+    build: ./backend
     container_name: corebanking-app
     ports:
       - "8080:8080"
@@ -49,6 +49,14 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: corebanking-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - app
 
 volumes:
   corebanking-pgdata:
