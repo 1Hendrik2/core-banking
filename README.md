@@ -219,7 +219,17 @@ exercise that wiring from both directions.
 
 ## Transaction throughput estimate
 
-_[to be filled in from a real load test against the running Docker stack]_
+Measured on this development machine against `docker compose up`
+(API, Postgres, and RabbitMQ in Docker):
+
+- Hardware: ASUS Vivobook S 14 (M5406WA), AMD Ryzen AI 9 365 (10 cores / 20 threads), 24 GB RAM, Windows 11 Home
+- Load: 200 sequential HTTP `POST /accounts/{id}/transactions` (IN, 0.01 EUR, one account)
+- Result: 200 successful, 0 failed, in 8.46 s ≈ **23.7 tx/s**
+
+This is a single-account, single-currency figure. Concurrent posts to the
+same balance serialize on `SELECT … FOR UPDATE`, so same-row throughput
+will not grow by adding app instances. Multi-account traffic would be
+higher because different balance rows do not share that lock.
 
 ## Horizontal scaling considerations
 
